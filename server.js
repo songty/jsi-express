@@ -10,7 +10,7 @@ app.use(express.static(__dirname + '/public'));
 var people = {};
 
 app.post('/api/people', function(req, res) {
-  var id = people.length + 1;
+  var id = _.size(people) + 1;
   var person = {
     id: 1,
     name: req.param('name')
