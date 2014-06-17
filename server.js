@@ -44,6 +44,21 @@ app.post('/api/people', function(req, res) {
   res.json({ person: person });
 });
 
+app.put(/^\/api\/people\/(\d+)$/, function(req, res) {
+	(match = req.url.match(/^\/api\/people\/(\d+)$/));
+	var id = match[1];
+	var person = people[id];
+	var newPerson = {
+		id: id,
+		name: req.param('name')
+	};
+	people[id] = newPerson;
+	if (person) {
+		res.json(newPerson);
+	} else {
+		res.send(404, 'Sorry, that person does not exist.');
+	}
+});
 
 
 var server = app.listen(process.env.PORT || 3030, function() {
