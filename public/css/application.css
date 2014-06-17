@@ -1,4 +1,7 @@
-body {
-  background: #eee;
-  
+.error.predefined {
+  display: none;
+}
+
+.jumbotron input {
+  margin-bottom: 1em;
 }
