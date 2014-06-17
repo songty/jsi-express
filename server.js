@@ -60,6 +60,17 @@ app.put(/^\/api\/people\/(\d+)$/, function(req, res) {
 	}
 });
 
+app.delete(/^\/api\/people\/(\d+)$/, function(req, res) {
+	(match = req.url.match(/^\/api\/people\/(\d+)$/));
+	var id = match[1];
+	var person = people[id];
+	if (person) {
+		delete people[id];
+		res.send('Elvis has left the building.');
+	} else {
+		res.send(404, 'Sorry, that person does not exist.');
+	}
+});
 
 var server = app.listen(process.env.PORT || 3030, function() {
   console.log('Listening on port %d', server.address().port);
