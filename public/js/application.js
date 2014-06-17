@@ -23,6 +23,7 @@ $(function() {
     var options = { method: 'POST', data: data };
     var promise = $.ajax('/api/people', options);
     promise.then(updatePeople, handleError);
+    return false;
   });
 
   $(document).on('click', '.person-delete', function() {
@@ -32,6 +33,7 @@ $(function() {
     var url = '/api/people/' + id + '?_method=DELETE';
     var promise = $.ajax(url, options);
     promise.then(updatePeople, handleError);
+    return false;
   });
   updatePeople();
 });
