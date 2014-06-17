@@ -3,7 +3,7 @@ var app = express();
 
 app.use(require('morgan')('dev'));
 app.use(require('body-parser')());
-app.use(require('method-override')());
+app.use(require('method-override')('_method'));
 app.use(express.static(__dirname + '/public'));
 
 
