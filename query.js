@@ -29,11 +29,15 @@ var updatePerson = module.exports.updatePerson =function(update, person) {
 	return person.save();
 };
 
-var killPeople = module.exports.killPeople =function(people) {
-	var target = people.at(0);
-	console.log('Person destroyed %j', people.toJSON());
-	return target.destroy();
+var killPerson = module.exports.killPerson =function(person) {
+	console.log('Person destroyed %j', person.toJSON());
+	return person.destroy();
 };
+
+var killAllPersons = module.exports.killAllPersons = function(persons) {
+	return persons.remove();
+};
+
 // Updates
 // findPeople().then(updatePeople).then(fetchPeople).then(finish).done();
 // Creates

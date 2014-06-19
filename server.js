@@ -50,9 +50,11 @@ app.put('/api/people/:id', function(req, res) {
 });
 
 app.delete('/api/people/:id', function(req, res) {
-  var deleted = !!people[req.params.id];
-  delete people[req.params.id];
-  res.json({ status: deleted ? 'deleted' : 'ok' });
+  query.findPerson(req.params.id).then(function(person) {
+    query.killPerson(person).then(function(person) {
+        res.json({ status: person ? 'deleted' : 'ok' });
+    });
+  }).done();
 });
 
 var server = app.listen(process.env.PORT || 3000, function() {
