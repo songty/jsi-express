@@ -1,6 +1,7 @@
 var _ = require('lodash');
 var express = require('express');
 var app = express();
+var query = require('./query');
 
 app.use(require('morgan')('dev'));
 app.use(require('body-parser')());
@@ -26,13 +27,11 @@ app.get('/api/people', function(req, res) {
 });
 
 app.post('/api/people', function(req, res) {
-  var id = peopleSequence();
-  var person = {
-    id: id,
-    name: req.param('name')
-  };
-  people[id] = person;
-  res.json({ person: person });
+  query.createNewPerson(req.param('name')).then(function(person){
+	  res.json({ person: person });
+
+  }).done();
+
 });
 
 app.put('/api/people/:id', function(req, res) {
