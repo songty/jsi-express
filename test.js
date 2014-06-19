@@ -41,6 +41,6 @@ var killPeople = function(people) {
 // Updates
 // findPeople().then(updatePeople).then(fetchPeople).then(finish).done();
 // Creates
-// createNewPerson().then(fetchPeople).then(finish).done();
+createNewPerson().then(fetchPeople).then(finish).done();
 // Deletes 
 // findPeople().then(killPeople).then(fetchPeople).then(finish).done();
