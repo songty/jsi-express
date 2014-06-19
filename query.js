@@ -19,14 +19,14 @@ var finish = module.exports.finish = function() {
 	bookshelf.knex.client.pool.destroy();
 };
 
-var findPeople = module.exports.findPeople =function() {
-	return People.where({ id: process.argv[2] }).fetchAll();
+var findPerson = module.exports.findPerson =function(id) {
+	return People.where({ id: id }).fetch();
 };
 
-var updatePeople = module.exports.updatePeople =function(people) {
-	var target = people.at(0);
-	target.set({name: process.argv[3]});
-	return target.save();
+var updatePerson = module.exports.updatePerson =function(update, person) {
+	// var target = person;
+	person.set({name: update});
+	return person.save();
 };
 
 var killPeople = module.exports.killPeople =function(people) {

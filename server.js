@@ -23,21 +23,30 @@ app.get('/', function(req, res) {
 });
 
 app.get('/api/people', function(req, res) {
-  res.json({ people: _.values(people) });
+  query.fetchPeople().then(function(person) {
+    res.json({ person: person.toJSON() });
+  });
+});
+
+app.get('/api/people/:id', function(req, res) {
+  query.findPerson(req.params.id).then(function(person) {
+    res.json({ person: person.toJSON() });
+  });
 });
 
 app.post('/api/people', function(req, res) {
   query.createNewPerson(req.param('name')).then(function(person){
 	  res.json({ person: person });
-
   }).done();
 
 });
 
 app.put('/api/people/:id', function(req, res) {
-  var person = people[req.params.id];
-  person.name = req.body.name;
-  res.json({ person: person });
+  query.findPerson(req.params.id).then(function(person) {
+    query.updatePerson(req.param('name'), person).then(function(person) {
+      res.json({ person: person});
+    });
+  }).done();
 });
 
 app.delete('/api/people/:id', function(req, res) {
