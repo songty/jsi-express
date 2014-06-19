@@ -5,63 +5,65 @@ var query = require('./query');
 var bluebird = require('bluebird'), Promise = bluebird;
 var pg = bluebird.promisifyAll(require('pg'));
 
-app.use(require('morgan')('dev'));
-app.use(require('body-parser')());
-app.use(require('method-override')('_method'));
-app.use(express.static(__dirname + '/public'));
+var createApp = module.exports.app = function(options, client) {
+  app.use(require('morgan')('dev'));
+  app.use(require('body-parser')());
+  app.use(require('method-override')('_method'));
+  app.use(express.static(__dirname + '/public'));
 
-var people = {};
-var peopleSequence = (function() {
-  var sequence = 1;
-  return function() {
-    var result = sequence;
-    sequence += 1;
-    return result;
-  };
-}());
+  var people = {};
+  var peopleSequence = (function() {
+    var sequence = 1;
+    return function() {
+      var result = sequence;
+      sequence += 1;
+      return result;
+    };
+  }());
 
-app.get('/', function(req, res) {
-  res.redirect('/home/');
-});
-
-app.get('/api/people', function(req, res) {
-  query.fetchPeople().then(function(person) {
-    res.json({ person: person.toJSON() });
+  app.get('/', function(req, res) {
+    res.redirect('/home/');
   });
-});
 
-app.get('/api/people/:id', function(req, res) {
-  query.findPerson(req.params.id).then(function(person) {
-    res.json({ person: person.toJSON() });
+  app.get('/api/people', function(req, res) {
+    query.fetchPeople().then(function(person) {
+      res.json({ person: person.toJSON() });
+    });
   });
-});
 
-app.post('/api/people', function(req, res) {
-  query.createNewPerson(req.param('name')).then(function(person){
-	  res.json({ person: person });
-  }).done();
-
-});
-
-app.put('/api/people/:id', function(req, res) {
-  query.findPerson(req.params.id).then(function(person) {
-    query.updatePerson(req.param('name'), person).then(function(person) {
-      res.json({ person: person});
+  app.get('/api/people/:id', function(req, res) {
+    query.findPerson(req.params.id).then(function(person) {
+      res.json({ person: person.toJSON() });
     });
-  }).done();
-});
+  });
 
-app.delete('/api/people/:id', function(req, res) {
-  query.findPerson(req.params.id).then(function(person) {
-    query.killPerson(person).then(function(person) {
-        res.json({ status: person ? 'deleted' : 'ok' });
-    });
-  }).done();
-});
+  app.post('/api/people', function(req, res) {
+    query.createNewPerson(req.param('name')).then(function(person){
+  	  res.json({ person: person });
+    }).done();
 
-var server = app.listen(process.env.PORT || 3000, function() {
-  console.log('Listening on port %d', server.address().port);
-});
+  });
+
+  app.put('/api/people/:id', function(req, res) {
+    query.findPerson(req.params.id).then(function(person) {
+      query.updatePerson(req.param('name'), person).then(function(person) {
+        res.json({ person: person});
+      });
+    }).done();
+  });
+
+  app.delete('/api/people/:id', function(req, res) {
+    query.findPerson(req.params.id).then(function(person) {
+      query.killPerson(person).then(function(person) {
+          res.json({ status: person ? 'deleted' : 'ok' });
+      });
+    }).done();
+  });
+
+  var server = app.listen(process.env.PORT || 3000, function() {
+    console.log('Listening on port %d', server.address().port);
+  });
+};
 
 if (require.main === module) {
   var settings = {
